@@ -85,21 +85,33 @@ export class SidebarComponent {
         { label: 'Inventario',      icon: 'pi-box',         route: '/almacen/stock' },
         { label: 'Medicamentos',    icon: 'pi-pills',       route: '/almacen/medicamentos' },
         { label: 'Notas de Salida', icon: 'pi-file-export', route: '/almacen/notas-salida' },
+        { label: 'Historial',       icon: 'pi-history',     route: '/almacen/historial' },
       ];
     }
     if (rol === 'ADMIN') {
       return [
         { label: 'Usuarios',        icon: 'pi-users',       route: '/admin/usuarios' },
+        { label: 'Farmacias',       icon: 'pi-building',    route: '/admin/farmacias' },
         { label: 'Solicitudes',     icon: 'pi-list',        route: '/farmacia/solicitudes' },
         { label: 'Inventario',      icon: 'pi-box',         route: '/almacen/stock' },
         { label: 'Medicamentos',    icon: 'pi-pills',       route: '/almacen/medicamentos' },
         { label: 'Dashboard',       icon: 'pi-chart-bar',   route: '/almacen/dashboard' },
       ];
     }
-    // FARMACEUTICO / JEFE_FARMACIA
+    if (rol === 'JEFE_FARMACIA') {
+      return [
+        { label: 'Mis Solicitudes', icon: 'pi-list',        route: '/farmacia/solicitudes' },
+        { label: 'Nueva Solicitud', icon: 'pi-plus-circle', route: '/farmacia/solicitudes/nueva' },
+        { label: 'Historial',       icon: 'pi-history',     route: '/farmacia/historial' },
+        { label: 'Medicamentos',    icon: 'pi-pills',       route: '/farmacia/medicamentos' },
+      ];
+    }
+    // FARMACEUTICO
     return [
       { label: 'Mis Solicitudes', icon: 'pi-list',        route: '/farmacia/solicitudes' },
       { label: 'Nueva Solicitud', icon: 'pi-plus-circle', route: '/farmacia/solicitudes/nueva' },
+      { label: 'Historial',       icon: 'pi-history',     route: '/farmacia/historial' },
+      { label: 'Medicamentos',    icon: 'pi-pills',       route: '/farmacia/medicamentos' },
     ];
   }
 

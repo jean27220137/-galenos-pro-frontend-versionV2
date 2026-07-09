@@ -5,18 +5,18 @@ import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { NotaSalidaService } from '../../../core/services/nota-salida.service';
 import { NotaSalida } from '../../../core/models/nota-salida.model';
 
-const ALMACEN_ID = 1;
-
 @Component({
   selector: 'app-notas-salida-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, PageHeaderComponent, StatusBadgeComponent],
+  imports: [CommonModule, TableModule, ButtonModule, ToastModule, PageHeaderComponent, StatusBadgeComponent],
   template: `
+    <p-toast />
     <div class="p-6">
       <app-page-header title="Notas de Salida" subtitle="Despachos generados por el almacén" />
 
@@ -73,7 +73,7 @@ export class NotasSalidaListComponent implements OnInit {
 
   cargar(): void {
     this.cargando = true;
-    this.notaSalidaService.listarPorAlmacen(ALMACEN_ID)
+    this.notaSalidaService.listarPorAlmacen(1)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => { this.notas = data; this.cargando = false; this.cdr.markForCheck(); },
@@ -91,11 +91,13 @@ export class NotasSalidaListComponent implements OnInit {
       .subscribe({
         next: () => {
           nota.estado = 'ENTREGADA';
-          this.messageService.add({ severity: 'success', summary: 'Entrega confirmada', detail: nota.nroNotaSalida });
+          this.messageService.add({ severity: 'success', summary: 'Entrega confirmada',
+            detail: `Nota ${nota.nroNotaSalida} marcada como entregada.` });
           this.cdr.markForCheck();
         },
-        error: () => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo confirmar la entrega' });
+        error: (err) => {
+          const detalle = err?.error?.error ?? err?.error?.message ?? 'No se pudo confirmar la entrega.';
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: detalle, life: 6000 });
           this.cdr.markForCheck();
         }
       });

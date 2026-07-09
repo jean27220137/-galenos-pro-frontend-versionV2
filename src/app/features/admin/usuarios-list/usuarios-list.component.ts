@@ -7,11 +7,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { MessageService } from 'primeng/api';
 import { PageHeaderComponent } from '../../../shared/components/page-header/page-header.component';
 import { StatusBadgeComponent } from '../../../shared/components/status-badge/status-badge.component';
 import { UsuarioService, Usuario, UsuarioRequest } from '../../../core/services/usuario.service';
+import { FarmaciaService } from '../../../core/services/farmacia.service';
+import { Farmacia } from '../../../core/models/farmacia.model';
+import { catchError, of } from 'rxjs';
 
 const ROLES = [
   { label: 'Farmacéutico',  value: 'FARMACEUTICO' },
@@ -25,7 +27,7 @@ const ROLES = [
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule,
             InputTextModule, DialogModule, SelectModule,
-            InputNumberModule, PageHeaderComponent, StatusBadgeComponent],
+            PageHeaderComponent, StatusBadgeComponent],
   template: `
     <div class="p-6">
       <app-page-header title="Usuarios del sistema" subtitle="Gestión de accesos por rol">
@@ -130,19 +132,23 @@ const ROLES = [
             <small *ngIf="f['password'].invalid && f['password'].touched" class="form-error">Mínimo 8 caracteres.</small>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
-            <div>
-              <label class="form-label">Rol *</label>
-              <p-select formControlName="rol" [options]="roles"
-                        optionLabel="label" optionValue="value"
-                        placeholder="Seleccionar rol" styleClass="w-full" />
-              <small *ngIf="f['rol'].invalid && f['rol'].touched" class="form-error">Requerido.</small>
-            </div>
-            <div>
-              <label class="form-label">Farmacia ID</label>
-              <p-inputnumber formControlName="farmaciaId" [min]="1"
-                             placeholder="ID farmacia" styleClass="w-full" />
-            </div>
+          <div>
+            <label class="form-label">Rol *</label>
+            <p-select formControlName="rol" [options]="roles"
+                      optionLabel="label" optionValue="value"
+                      placeholder="Seleccionar rol" styleClass="w-full" />
+            <small *ngIf="f['rol'].invalid && f['rol'].touched" class="form-error">Requerido.</small>
+          </div>
+
+          <div>
+            <label class="form-label">Farmacia asignada</label>
+            <p-select formControlName="farmaciaId"
+                      [options]="farmaciaOpciones"
+                      optionLabel="label" optionValue="value"
+                      placeholder="Sin farmacia"
+                      [showClear]="true"
+                      appendTo="body"
+                      styleClass="w-full" />
           </div>
 
           <div>
@@ -167,13 +173,15 @@ const ROLES = [
   `
 })
 export class UsuariosListComponent implements OnInit {
-  private readonly usuarioService = inject(UsuarioService);
-  private readonly messageService = inject(MessageService);
-  private readonly fb             = inject(FormBuilder);
-  private readonly cdr            = inject(ChangeDetectorRef);
-  private readonly destroyRef     = inject(DestroyRef);
+  private readonly usuarioService  = inject(UsuarioService);
+  private readonly farmaciaService = inject(FarmaciaService);
+  private readonly messageService  = inject(MessageService);
+  private readonly fb              = inject(FormBuilder);
+  private readonly cdr             = inject(ChangeDetectorRef);
+  private readonly destroyRef      = inject(DestroyRef);
 
-  usuarios:   Usuario[] = [];
+  usuarios:   Usuario[]  = [];
+  farmacias:  Farmacia[] = [];
   busqueda    = '';
   cargando    = false;
   dialogVisible = false;
@@ -182,6 +190,14 @@ export class UsuariosListComponent implements OnInit {
   editandoId: number | null = null;
 
   readonly roles = ROLES;
+
+  get farmaciaOpciones() {
+    return this.farmacias.map(f => ({
+      label: f.nombre,
+      value: f.id
+    }));
+  }
+
 
   form: FormGroup = this.fb.group({
     nombres:    ['', Validators.required],
@@ -206,7 +222,12 @@ export class UsuariosListComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void { this.cargar(); }
+  ngOnInit(): void {
+    this.cargar();
+    this.farmaciaService.listarTodas()
+      .pipe(takeUntilDestroyed(this.destroyRef), catchError(() => of([])))
+      .subscribe(data => { this.farmacias = data; this.cdr.markForCheck(); });
+  }
 
   cargar(): void {
     this.cargando = true;
