@@ -23,6 +23,12 @@ export const routes: Routes = [
           { path: 'solicitudes/nueva', loadComponent: () =>
               import('./features/farmacia/solicitud-form/solicitud-form.component')
                 .then(m => m.SolicitudFormComponent) },
+          { path: 'historial', loadComponent: () =>
+              import('./features/farmacia/solicitudes-historial/solicitudes-historial.component')
+                .then(m => m.SolicitudesHistorialComponent) },
+          { path: 'medicamentos', loadComponent: () =>
+              import('./features/farmacia/medicamentos-catalogo/medicamentos-catalogo.component')
+                .then(m => m.MedicamentosCatalogoComponent) },
           { path: '', redirectTo: 'solicitudes', pathMatch: 'full' }
         ]
       },
@@ -49,6 +55,9 @@ export const routes: Routes = [
           { path: 'medicamentos', loadComponent: () =>
               import('./features/almacen/medicamentos-list/medicamentos-list.component')
                 .then(m => m.MedicamentosListComponent) },
+          { path: 'historial', loadComponent: () =>
+              import('./features/almacen/almacen-historial/almacen-historial.component')
+                .then(m => m.AlmacenHistorialComponent) },
           { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
         ]
       },
@@ -60,6 +69,9 @@ export const routes: Routes = [
           { path: 'usuarios', loadComponent: () =>
               import('./features/admin/usuarios-list/usuarios-list.component')
                 .then(m => m.UsuariosListComponent) },
+          { path: 'farmacias', loadComponent: () =>
+              import('./features/admin/farmacias-list/farmacias-list.component')
+                .then(m => m.FarmaciasListComponent) },
           { path: '', redirectTo: 'usuarios', pathMatch: 'full' }
         ]
       }

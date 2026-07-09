@@ -29,7 +29,27 @@ export class SolicitudService {
     return this.http.post<Solicitud>(this.base, dto);
   }
 
+  aprobar(id: number): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}/aprobar`, {});
+  }
+
   cancelar(id: number): Observable<void> {
     return this.http.put<void>(`${this.base}/${id}/cancelar`, {});
+  }
+
+  marcarEnProceso(id: number): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}/en-proceso`, {});
+  }
+
+  listarActivas(): Observable<Solicitud[]> {
+    return this.http.get<Solicitud[]>(`${this.base}/activas`);
+  }
+
+  confirmarEntrega(id: number): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}/entregar`, {});
+  }
+
+  rechazar(id: number, motivo: string): Observable<void> {
+    return this.http.put<void>(`${this.base}/${id}/rechazar`, { motivo });
   }
 }

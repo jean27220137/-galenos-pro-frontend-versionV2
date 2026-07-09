@@ -71,7 +71,30 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "coverage": false,
+            "coverageReporters": ["lcov", "text-summary"],
+            "coverageExclude": [
+              "src/main.ts",
+              "src/app/app.config.ts",
+              "src/app/app.routes.ts",
+              "src/environments/**"
+            ],
+            "coverageThresholds": {
+              "statements": 60,
+              "branches": 60,
+              "functions": 55,
+              "lines": 60
+            }
+          },
+          "configurations": {
+            "ci": {
+              "coverage": true,
+              "watch": false
+            }
+          }
         }
       }
     }
