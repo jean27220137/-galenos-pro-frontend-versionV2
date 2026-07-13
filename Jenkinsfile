@@ -42,22 +42,19 @@ pipeline {
       steps {
         dir("${SERVICE_DIR}") {
           withSonarQubeEnv('SonarQube-Galenos') {
-            sh '''
-              PROJ_DIR=$(pwd)
-              echo "=== Directorio de trabajo: $PROJ_DIR ==="
-              ls -la $PROJ_DIR
-              echo "=== src/app: ===" && ls $PROJ_DIR/src/app || true
-              echo "=== coverage: ===" && ls $PROJ_DIR/coverage || true
-              npx sonar-scanner \
-                -Dsonar.projectBaseDir=$PROJ_DIR \
-                -Dsonar.projectKey=galenos-pro-frontend \
-                -Dsonar.projectName="Galenos Pro Frontend" \
-                -Dsonar.sources=$PROJ_DIR/src/app \
-                -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
-                -Dsonar.javascript.lcov.reportPaths=$PROJ_DIR/coverage/lcov.info \
-                -Dsonar.host.url=http://galenos-sonarqube:9000 \
-                -Dsonar.login=$SONAR_AUTH_TOKEN
-            '''
+            script {
+              def scannerHome = tool 'SonarScanner'
+              sh """
+                ${scannerHome}/bin/sonar-scanner \
+                  -Dsonar.projectKey=galenos-pro-frontend \
+                  -Dsonar.projectName='Galenos Pro Frontend' \
+                  -Dsonar.sources=src/app \
+                  -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
+                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                  -Dsonar.host.url=http://galenos-sonarqube:9000 \
+                  -Dsonar.login=${env.SONAR_AUTH_TOKEN}
+              """
+            }
           }
         }
       }
