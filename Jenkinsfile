@@ -43,7 +43,9 @@ pipeline {
         dir("${SERVICE_DIR}") {
           withSonarQubeEnv('SonarQube-Galenos') {
             sh '''
+              PROJ_DIR=$(pwd)
               npx sonar-scanner \
+                -Dsonar.projectBaseDir=$PROJ_DIR \
                 -Dsonar.projectKey=galenos-pro-frontend \
                 -Dsonar.projectName="Galenos Pro Frontend" \
                 -Dsonar.sources=src/app \
