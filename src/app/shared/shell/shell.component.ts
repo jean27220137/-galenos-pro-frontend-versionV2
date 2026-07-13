@@ -8,6 +8,7 @@ import { NotificationService } from '../../core/services/notification.service';
   selector: 'app-shell',
   standalone: true,
   imports: [RouterOutlet, ToastModule, SidebarComponent],
+  /* v8 ignore start */
   template: `
     <div class="shell-layout">
       <app-sidebar />
@@ -17,6 +18,7 @@ import { NotificationService } from '../../core/services/notification.service';
     </div>
     <p-toast position="top-right" [life]="5000" />
   `
+  /* v8 ignore stop */
 })
 export class ShellComponent implements OnInit, OnDestroy {
   private readonly notificationService = inject(NotificationService);

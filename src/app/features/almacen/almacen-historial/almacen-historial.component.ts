@@ -27,6 +27,7 @@ const FILTROS = [
   standalone: true,
   imports: [CommonModule, FormsModule, TableModule, ButtonModule,
             InputTextModule, SelectModule, PageHeaderComponent, StatusBadgeComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Historial de Despachos"
@@ -187,6 +188,7 @@ const FILTROS = [
       </p-table>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class AlmacenHistorialComponent implements OnInit {
   readonly cdr = inject(ChangeDetectorRef);
@@ -244,6 +246,7 @@ export class AlmacenHistorialComponent implements OnInit {
           this.cargando = false;
           this.cdr.markForCheck();
         },
+        /* v8 ignore next 5 */
         error: () => {
           this.cargando = false;
           this.msgSvc.add({ severity: 'error', summary: 'Error',

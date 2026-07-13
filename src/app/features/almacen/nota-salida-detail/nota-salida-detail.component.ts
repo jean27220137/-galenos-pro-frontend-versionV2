@@ -12,6 +12,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
   selector: 'app-nota-salida-detail',
   standalone: true,
   imports: [CommonModule, DatePipe, CurrencyPipe, ButtonModule, TableModule, StatusBadgeComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
 
@@ -139,6 +140,7 @@ import { StatusBadgeComponent } from '../../../shared/components/status-badge/st
       </div>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class NotaSalidaDetailComponent implements OnInit {
   readonly router = inject(Router);

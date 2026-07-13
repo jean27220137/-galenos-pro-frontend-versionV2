@@ -18,6 +18,7 @@ import { AuthService } from '../../../core/services/auth.service';
     ButtonModule, InputTextModule, PasswordModule,
     FloatLabelModule, DividerModule, MessageModule,
   ],
+  /* v8 ignore start */
   template: `
     <div class="login-root">
 
@@ -121,6 +122,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
     </div>
   `
+  /* v8 ignore stop */
 })
 export class LoginComponent {
   private readonly fb     = inject(FormBuilder);

@@ -109,4 +109,50 @@ describe('AlmacenDashboardComponent', () => {
     component.proximosVencer = [mockVencer, { ...mockVencer, diasRestantes: 90 }];
     expect(component.proximos30).toBe(1);
   });
+
+  it('diasColor retorna rojo para días <= 30', () => {
+    expect(component.diasColor(5)).toBe('#B91C1C');
+    expect(component.diasColor(30)).toBe('#B91C1C');
+  });
+
+  it('diasColor retorna naranja para días entre 31 y 60', () => {
+    expect(component.diasColor(31)).toBe('#D97706');
+    expect(component.diasColor(60)).toBe('#D97706');
+  });
+
+  it('diasColor retorna verde para días > 60', () => {
+    expect(component.diasColor(61)).toBe('#15803D');
+    expect(component.diasColor(90)).toBe('#15803D');
+  });
+
+  it('loading.vencer es false aunque getProximosVencer falle', () => {
+    dashboardServiceMock.getProximosVencer = vi.fn().mockReturnValue(
+      throwError(() => new Error('error'))
+    );
+    component.ngOnInit();
+    expect(component.loading.vencer).toBeFalsy();
+  });
+
+  it('loading.solicitudes es false aunque getSolicitudesPendientes falle', () => {
+    dashboardServiceMock.getSolicitudesPendientes = vi.fn().mockReturnValue(
+      throwError(() => new Error('error'))
+    );
+    component.ngOnInit();
+    expect(component.loading.solicitudes).toBeFalsy();
+  });
+
+  it('loading.vencidos es false aunque getVencidos falle', () => {
+    dashboardServiceMock.getVencidos = vi.fn().mockReturnValue(
+      throwError(() => new Error('error'))
+    );
+    component.ngOnInit();
+    expect(component.loading.vencidos).toBeFalsy();
+  });
+
+  it('error en getTotalMedicamentos no rompe el componente', () => {
+    dashboardServiceMock.getTotalMedicamentos = vi.fn().mockReturnValue(
+      throwError(() => new Error('error'))
+    );
+    expect(() => component.ngOnInit()).not.toThrow();
+  });
 });

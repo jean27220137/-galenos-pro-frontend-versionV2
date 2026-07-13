@@ -82,4 +82,34 @@ describe('AlmacenDashboardService', () => {
     expect(req.request.method).toBe('GET');
     req.flush([mockSolicitud]);
   });
+
+  it('getVencidos llama GET con param almacenId=1', () => {
+    const mockStock = { id: 1, medicamentoId: 1, almacenId: 1, lote: 'L1',
+                        cantidad: 5, fechaVencimiento: '2020-01-01', precioUnitario: 2 };
+    service.getVencidos().subscribe(data => {
+      expect(data[0].lote).toBe('L1');
+    });
+    const req = http.expectOne(r =>
+      r.url.includes('/almacen/stock') && r.params.get('almacenId') === '1'
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush([mockStock]);
+  });
+
+  it('getTotalMedicamentos llama GET y retorna count', () => {
+    service.getTotalMedicamentos().subscribe(n => {
+      expect(n).toBe(3);
+    });
+    const req = http.expectOne(r => r.url.includes('/almacen/medicamentos'));
+    expect(req.request.method).toBe('GET');
+    req.flush([{}, {}, {}]);
+  });
+
+  it('getTotalMedicamentos retorna 0 con respuesta null', () => {
+    service.getTotalMedicamentos().subscribe(n => {
+      expect(n).toBe(0);
+    });
+    const req = http.expectOne(r => r.url.includes('/almacen/medicamentos'));
+    req.flush(null);
+  });
 });

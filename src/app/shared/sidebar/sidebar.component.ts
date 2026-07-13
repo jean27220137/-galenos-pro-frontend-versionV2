@@ -13,6 +13,7 @@ interface NavItem {
   selector: 'app-sidebar',
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive],
+  /* v8 ignore start */
   template: `
     <aside class="sidebar" role="navigation" aria-label="Navegación principal">
 
@@ -59,6 +60,7 @@ interface NavItem {
       </div>
     </aside>
   `
+  /* v8 ignore stop */
 })
 export class SidebarComponent {
   private readonly authService = inject(AuthService);

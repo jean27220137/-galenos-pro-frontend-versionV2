@@ -34,6 +34,13 @@ describe('StockService', () => {
     req.flush([mockStock]);
   });
 
+  it('consultarDisponible llama GET con medicamentoId y almacenId', () => {
+    service.consultarDisponible(10, 1).subscribe(qty => { expect(qty).toBe(150); });
+    const req = http.expectOne(r => r.url.includes('/stock/10/disponible') && r.url.includes('almacenId=1'));
+    expect(req.request.method).toBe('GET');
+    req.flush(150);
+  });
+
   it('registrarEntrada llama POST y retorna stock', () => {
     const entrada: EntradaStockRequest = {
       medicamentoId: 10, almacenId: 1, lote: 'LOTE-002',

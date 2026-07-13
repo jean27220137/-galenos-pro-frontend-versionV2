@@ -22,6 +22,7 @@ const UMBRAL_CRITICO = 10;
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule,
             InputTextModule, DialogModule, InputNumberModule, PageHeaderComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Stock del Almacén" subtitle="Inventario de medicamentos por lote">
@@ -167,6 +168,7 @@ const UMBRAL_CRITICO = 10;
       </p-dialog>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class StockListComponent implements OnInit {
   private readonly stockService       = inject(StockService);

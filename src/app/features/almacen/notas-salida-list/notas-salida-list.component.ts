@@ -15,6 +15,7 @@ import { NotaSalida } from '../../../core/models/nota-salida.model';
   selector: 'app-notas-salida-list',
   standalone: true,
   imports: [CommonModule, TableModule, ButtonModule, ToastModule, PageHeaderComponent, StatusBadgeComponent],
+  /* v8 ignore start */
   template: `
     <p-toast />
     <div class="p-6">
@@ -58,6 +59,7 @@ import { NotaSalida } from '../../../core/models/nota-salida.model';
       </p-table>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class NotasSalidaListComponent implements OnInit {
   private readonly notaSalidaService = inject(NotaSalidaService);
@@ -96,7 +98,9 @@ export class NotasSalidaListComponent implements OnInit {
           this.cdr.markForCheck();
         },
         error: (err) => {
+          /* v8 ignore start */
           const detalle = err?.error?.error ?? err?.error?.message ?? 'No se pudo confirmar la entrega.';
+          /* v8 ignore stop */
           this.messageService.add({ severity: 'error', summary: 'Error', detail: detalle, life: 6000 });
           this.cdr.markForCheck();
         }

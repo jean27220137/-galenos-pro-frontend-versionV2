@@ -60,4 +60,8 @@ describe('AuthService', () => {
     localStorage.setItem('galenos_sesion', JSON.stringify(mockSesion));
     expect(service.tieneRol('ALMACENERO')).toBe(false);
   });
+
+  it('tieneRol retorna false sin sesión activa', () => {
+    expect(service.tieneRol('ADMIN')).toBe(false);
+  });
 });

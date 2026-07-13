@@ -12,6 +12,7 @@ import { Medicamento } from '../../../core/models/medicamento.model';
   selector: 'app-medicamentos-catalogo',
   standalone: true,
   imports: [CommonModule, FormsModule, TableModule, InputTextModule, PageHeaderComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Catálogo de Medicamentos"
@@ -83,6 +84,7 @@ import { Medicamento } from '../../../core/models/medicamento.model';
       </p-table>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class MedicamentosCatalogoComponent implements OnInit {
   private readonly medicSvc   = inject(MedicamentoService);

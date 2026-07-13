@@ -28,6 +28,7 @@ const ROLES = [
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule,
             InputTextModule, DialogModule, SelectModule,
             PageHeaderComponent, StatusBadgeComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Usuarios del sistema" subtitle="Gestión de accesos por rol">
@@ -171,6 +172,7 @@ const ROLES = [
       </p-dialog>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class UsuariosListComponent implements OnInit {
   private readonly usuarioService  = inject(UsuarioService);

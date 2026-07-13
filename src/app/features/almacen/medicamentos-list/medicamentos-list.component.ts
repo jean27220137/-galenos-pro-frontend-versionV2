@@ -17,6 +17,7 @@ import { Medicamento } from '../../../core/models/medicamento.model';
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule,
             InputTextModule, DialogModule, InputNumberModule, PageHeaderComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Catálogo de Medicamentos" subtitle="Medicamentos registrados en el sistema SISMED">
@@ -154,6 +155,7 @@ import { Medicamento } from '../../../core/models/medicamento.model';
       </p-dialog>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class MedicamentosListComponent implements OnInit {
   private readonly medicamentoService = inject(MedicamentoService);

@@ -23,6 +23,7 @@ const ESTADO_MAP: Record<string, BadgeStyle> = {
 @Component({
   selector: 'app-status-badge',
   standalone: true,
+  /* v8 ignore start */
   template: `
     <span class="status-badge"
           [style.color]="style.color"
@@ -32,6 +33,7 @@ const ESTADO_MAP: Record<string, BadgeStyle> = {
       {{ style.label }}
     </span>
   `
+  /* v8 ignore stop */
 })
 export class StatusBadgeComponent {
   @Input() set estado(value: string) { this._estado = value ?? ''; }

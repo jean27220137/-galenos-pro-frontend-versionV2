@@ -67,4 +67,22 @@ describe('SolicitudService', () => {
     expect(req.request.method).toBe('GET');
     req.flush([mockSolicitud]);
   });
+
+  it('buscarPorId llama GET al endpoint con id', () => {
+    service.buscarPorId(1).subscribe(data => {
+      expect(data.id).toBe(1);
+    });
+    const req = http.expectOne(r => r.url.includes('/solicitudes/1') && !r.url.includes('/estado'));
+    expect(req.request.method).toBe('GET');
+    req.flush(mockSolicitud);
+  });
+
+  it('consultarEstado llama GET al endpoint de estado', () => {
+    service.consultarEstado(1).subscribe(data => {
+      expect(data.estado).toBe('PENDIENTE');
+    });
+    const req = http.expectOne(r => r.url.includes('/solicitudes/1/estado'));
+    expect(req.request.method).toBe('GET');
+    req.flush({ estado: 'PENDIENTE' });
+  });
 });

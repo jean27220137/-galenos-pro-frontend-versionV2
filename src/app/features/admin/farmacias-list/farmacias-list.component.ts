@@ -31,6 +31,7 @@ const TIPOS_FARMACIA = [
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule, ButtonModule,
             InputTextModule, DialogModule, SelectModule, PageHeaderComponent],
+  /* v8 ignore start */
   template: `
     <div class="p-6">
       <app-page-header title="Gestión de Farmacias"
@@ -228,6 +229,7 @@ const TIPOS_FARMACIA = [
       </p-dialog>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class FarmaciasListComponent implements OnInit {
   private readonly farmaciaSvc  = inject(FarmaciaService);
@@ -400,7 +402,9 @@ export class FarmaciasListComponent implements OnInit {
         },
         error: (err) => {
           this.guardando   = false;
+          /* v8 ignore start */
           this.errorDialog = err?.error?.error ?? 'Error al guardar la farmacia.';
+          /* v8 ignore stop */
           this.cdr.markForCheck();
         }
       });

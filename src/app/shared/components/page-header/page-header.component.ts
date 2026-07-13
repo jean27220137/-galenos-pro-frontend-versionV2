@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-page-header',
   standalone: true,
   imports: [CommonModule],
+  /* v8 ignore start */
   template: `
     <div class="page-header">
       <div>
@@ -16,6 +17,7 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `
+  /* v8 ignore stop */
 })
 export class PageHeaderComponent {
   @Input() title    = '';
