@@ -117,7 +117,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
       <!-- Badge de entorno -->
       <div class="login-env-badge" role="note" aria-label="Entorno">
-        <i class="pi pi-server"></i> DEV
+        <i class="pi pi-server"></i> v2.0
       </div>
 
     </div>
