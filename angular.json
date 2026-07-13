@@ -89,10 +89,10 @@
               "src/environments/**"
             ],
             "coverageThresholds": {
-              "statements": 60,
-              "branches": 55,
-              "functions": 50,
-              "lines": 58
+              "statements": 100,
+              "branches": 100,
+              "functions": 100,
+              "lines": 100
             }
           },
           "configurations": {
