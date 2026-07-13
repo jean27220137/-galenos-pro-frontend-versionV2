@@ -171,6 +171,7 @@ export class SolicitudesPendientesComponent implements OnInit {
   expandidos:   Set<number>             = new Set();
   procesando:   Record<number, boolean> = {};
   cargando = false;
+  error    = false;
 
   get paraDespachar(): number {
     return this.solicitudes.filter(
@@ -187,6 +188,7 @@ export class SolicitudesPendientesComponent implements OnInit {
 
   cargar(): void {
     this.cargando = true;
+    this.error    = false;
     this.expandidos = new Set();
     this.solicitudSvc.listarActivas()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -198,6 +200,7 @@ export class SolicitudesPendientesComponent implements OnInit {
         },
         error: () => {
           this.cargando = false;
+          this.error    = true;
           this.msgSvc.add({
             severity: 'error', summary: 'Error de conexión',
             detail: 'No se pudo conectar con farmacia-service. Verifique que esté en línea.',
