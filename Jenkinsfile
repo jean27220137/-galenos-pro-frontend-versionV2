@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    SERVICE_DIR  = 'frontend-galenos-pro'
     SERVICE_NAME = 'frontend'
     SONAR_KEY    = 'galenos-pro-frontend'
   }
@@ -24,37 +23,31 @@ pipeline {
 
     stage('Install') {
       steps {
-        dir("${SERVICE_DIR}") {
-          sh 'npm ci --legacy-peer-deps'
-        }
+        sh 'npm ci --legacy-peer-deps'
       }
     }
 
     stage('Test y Cobertura') {
       steps {
-        dir("${SERVICE_DIR}") {
-          sh 'npm run test:coverage'
-        }
+        sh 'npm run test:coverage'
       }
     }
 
     stage('Análisis SonarQube') {
       steps {
-        dir("${SERVICE_DIR}") {
-          withSonarQubeEnv('SonarQube-Galenos') {
-            script {
-              def scannerHome = tool 'SonarScanner'
-              sh """
-                ${scannerHome}/bin/sonar-scanner \
-                  -Dsonar.projectKey=galenos-pro-frontend \
-                  -Dsonar.projectName='Galenos Pro Frontend' \
-                  -Dsonar.sources=src/app \
-                  -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
-                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                  -Dsonar.host.url=http://galenos-sonarqube:9000 \
-                  -Dsonar.login=${env.SONAR_AUTH_TOKEN}
-              """
-            }
+        withSonarQubeEnv('SonarQube-Galenos') {
+          script {
+            def scannerHome = tool 'SonarScanner'
+            sh """
+              ${scannerHome}/bin/sonar-scanner \
+                -Dsonar.projectKey=galenos-pro-frontend \
+                -Dsonar.projectName='Galenos Pro Frontend' \
+                -Dsonar.sources=src/app \
+                -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
+                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                -Dsonar.host.url=http://galenos-sonarqube:9000 \
+                -Dsonar.login=${env.SONAR_AUTH_TOKEN}
+            """
           }
         }
       }
@@ -70,9 +63,7 @@ pipeline {
 
     stage('Build Producción') {
       steps {
-        dir("${SERVICE_DIR}") {
-          sh 'npm run build'
-        }
+        sh 'npm run build'
       }
     }
 
