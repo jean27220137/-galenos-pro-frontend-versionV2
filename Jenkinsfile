@@ -42,16 +42,7 @@ pipeline {
       steps {
         dir("${SERVICE_DIR}") {
           withSonarQubeEnv('SonarQube-Galenos') {
-            sh """
-              npx sonar-scanner \
-                -Dsonar.projectKey=${SONAR_KEY} \
-                -Dsonar.projectName='Galenos Pro - Frontend' \
-                -Dsonar.sources=src/app \
-                -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
-                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                -Dsonar.host.url=${SONAR_HOST_URL} \
-                -Dsonar.token=${SONAR_AUTH_TOKEN}
-            """
+            sh 'npx sonar-scanner -Dsonar.token=$SONAR_AUTH_TOKEN'
           }
         }
       }
