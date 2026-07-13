@@ -44,7 +44,7 @@ pipeline {
                 -Dsonar.projectName='Galenos Pro Frontend' \
                 -Dsonar.sources=src/app \
                 -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
-                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                -Dsonar.javascript.lcov.reportPaths=coverage/frontend-galenos-pro/lcov.info \
                 -Dsonar.host.url=http://galenos-sonarqube:9000 \
                 -Dsonar.login=${env.SONAR_AUTH_TOKEN}
             """
