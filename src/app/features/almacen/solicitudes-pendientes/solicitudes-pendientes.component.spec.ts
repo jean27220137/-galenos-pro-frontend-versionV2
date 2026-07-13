@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideZonelessChangeDetection } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { SolicitudesPendientesComponent } from './solicitudes-pendientes.component';
 import { Solicitud } from '../../../core/models/solicitud.model';
 
@@ -25,6 +26,7 @@ describe('SolicitudesPendientesComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
+        MessageService,
       ]
     }).compileComponents();
 
@@ -37,13 +39,15 @@ describe('SolicitudesPendientesComponent', () => {
 
   it('se crea correctamente', () => {
     expect(fixture.componentInstance).toBeTruthy();
-    http.expectOne(r => r.url.includes('estado=PENDIENTE')).flush(mockSolicitudes);
+    http.expectOne(r => r.url.includes('/medicamentos')).flush([]);
+    http.expectOne(r => r.url.includes('/activas')).flush(mockSolicitudes);
   });
 
-  it('carga solicitudes PENDIENTE al iniciar y desactiva el loading', () => {
+  it('carga solicitudes activas al iniciar y desactiva el loading', () => {
     const comp = fixture.componentInstance;
 
-    const req = http.expectOne(r => r.url.includes('estado=PENDIENTE'));
+    http.expectOne(r => r.url.includes('/medicamentos')).flush([]);
+    const req = http.expectOne(r => r.url.includes('/activas'));
     expect(req.request.method).toBe('GET');
     req.flush(mockSolicitudes);
 
@@ -54,7 +58,8 @@ describe('SolicitudesPendientesComponent', () => {
   it('muestra mensaje de error cuando el servicio falla', () => {
     const comp = fixture.componentInstance;
 
-    http.expectOne(r => r.url.includes('estado=PENDIENTE'))
+    http.expectOne(r => r.url.includes('/medicamentos')).flush([]);
+    http.expectOne(r => r.url.includes('/activas'))
         .flush(null, { status: 503, statusText: 'Service Unavailable' });
 
     expect(comp.solicitudes.length).toBe(0);
