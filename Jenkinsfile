@@ -4,15 +4,13 @@ pipeline {
   environment {
     SERVICE_DIR  = 'frontend-galenos-pro'
     SERVICE_NAME = 'frontend'
-    IMAGE_NAME   = "galenos/frontend"
-    SONAR_KEY    = 'galenos-frontend'
+    SONAR_KEY    = 'galenos-pro-frontend'
   }
 
   options {
     timeout(time: 20, unit: 'MINUTES')
     buildDiscarder(logRotator(numToKeepStr: '10'))
     disableConcurrentBuilds()
-    ansiColor('xterm')
     timestamps()
   }
 
@@ -21,10 +19,6 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
-        script {
-          env.GIT_SHORT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-        }
-        echo "Branch: ${env.BRANCH_NAME} | Commit: ${env.GIT_SHORT}"
       }
     }
 
@@ -36,24 +30,27 @@ pipeline {
       }
     }
 
-    stage('Test') {
+    stage('Test y Cobertura') {
       steps {
         dir("${SERVICE_DIR}") {
-          sh 'npm test -- --watch=false'
+          sh 'npm run test:coverage'
         }
       }
     }
 
-    stage('SonarQube Analysis') {
+    stage('Análisis SonarQube') {
       steps {
         dir("${SERVICE_DIR}") {
-          withSonarQubeEnv('galenos-sonar') {
+          withSonarQubeEnv('SonarQube-Galenos') {
             sh """
               npx sonar-scanner \
                 -Dsonar.projectKey=${SONAR_KEY} \
+                -Dsonar.projectName='Galenos Pro - Frontend' \
                 -Dsonar.sources=src/app \
-                -Dsonar.host.url=${env.SONAR_HOST_URL ?: 'http://sonarqube:9000'} \
-                -Dsonar.token=${env.SONAR_TOKEN}
+                -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
+                -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                -Dsonar.host.url=${SONAR_HOST_URL} \
+                -Dsonar.token=${SONAR_AUTH_TOKEN}
             """
           }
         }
@@ -68,7 +65,7 @@ pipeline {
       }
     }
 
-    stage('Build') {
+    stage('Build Producción') {
       steps {
         dir("${SERVICE_DIR}") {
           sh 'npm run build'
@@ -76,32 +73,14 @@ pipeline {
       }
     }
 
-    stage('Docker Build') {
-      steps {
-        dir("${SERVICE_DIR}") {
-          sh "docker build -t ${IMAGE_NAME}:${GIT_SHORT} -t ${IMAGE_NAME}:latest ."
-        }
-      }
-    }
-
-    stage('Deploy') {
-      when {
-        anyOf { branch 'develop'; branch 'main' }
-      }
-      steps {
-        dir('infrastructure') {
-          sh "docker compose up -d --no-deps --build ${SERVICE_NAME}"
-        }
-      }
-    }
   }
 
   post {
     success {
-      echo "✅ ${SERVICE_NAME} desplegado — commit: ${env.GIT_SHORT}"
+      echo 'Frontend aprobado — build listo para despliegue'
     }
     failure {
-      echo "❌ Pipeline fallido — deploy bloqueado para ${SERVICE_NAME}"
+      echo 'Pipeline fallido — corregir antes de hacer push'
     }
     always {
       cleanWs(cleanWhenAborted: true, cleanWhenFailure: false, cleanWhenSuccess: true)
