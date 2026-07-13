@@ -50,7 +50,7 @@ pipeline {
                 -Dsonar.exclusions=**/*.spec.ts,**/environments/** \
                 -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
                 -Dsonar.host.url=http://galenos-sonarqube:9000 \
-                -Dsonar.token=$SONAR_AUTH_TOKEN
+                -Dsonar.login=$SONAR_AUTH_TOKEN
             '''
           }
         }
